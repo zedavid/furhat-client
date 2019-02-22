@@ -53,26 +53,24 @@ class IristkClient(object):
         self._send_event('action.attend', agent, {'location': location, 'mode': mode})
 
     def gaze(self, agent, location, mode='default'):
-        self._send_event('action.gaze', agent, {'location': location, 'mode': mode})
+        self._send_event('furhatos.event.actions.ActionGaze', {'location': location, 'speed': 2})
 
     def gesture(self, agent, gesture_name):
-        self._send_event('action.gesture', agent, {'name': gesture_name})
+        self._send_event('furhatos.event.actions.ActionGesture', {'name': gesture_name})
 
-    def say(self, agent, text, audio_file=None, abort=True):
-        event_data = {'text': text, 'abort': abort}
+    def say(self, agent, text, audio_file=None):
+        event_data = {'text': text}
         if audio_file:
             event_data['audio'] = audio_file
-        self._send_event('action.speech', agent, event_data)
+        self._send_event('furhatos.event.actions.ActionSpeech', event_data)
 
-    def _send_event(self, event_name, agent, specialised_event):
+    def _send_event(self, event_name, specialised_event):
         event = {
-            'class': 'iristk.system.Event',
-            'event_name': event_name,
-            'agent': agent,
-            'event_sender': self.client_name,
-            'event_id': str(uuid.uuid1())
+            'event_name': event_name
         }
         event.update(specialised_event)
         event_msg = '{}\n'.format(json.dumps(event)).encode('utf8')
-        self.client.send('EVENT {} {}\n'.format(event_name, len(event_msg)).encode())
+        self.client.send('EVENT {} -1 {}\n'.format(event_name, len(event_msg)).encode())
         self.client.send(event_msg)
+
+

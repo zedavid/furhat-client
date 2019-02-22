@@ -17,7 +17,7 @@ def connect_to_iristk(host=None, client_name=DEFAULT_CLIENT_NAME, port=IRISTK_DE
         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client.connect((host, port))
         data = ''
-        client.send('CONNECT furhat {}\n'.format(client_name).encode('UTF-8'))
+        client.send('CONNECT broker EventSystem\n'.encode('UTF-8'))
         while True:
             packet = client.recv(1)
             if not packet:
@@ -27,7 +27,7 @@ def connect_to_iristk(host=None, client_name=DEFAULT_CLIENT_NAME, port=IRISTK_DE
             if '\n' in data:
                 line, data = data.split('\n', 1)
                 if debug:
-                    print(line)
+                    print('received {}'.format(line))
                 if line == 'CONNECTED':
                     client.send('SUBSCRIBE {}\n'.format(subscribe_to).encode())
                     break
