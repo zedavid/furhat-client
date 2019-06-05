@@ -1,6 +1,4 @@
 # furhat-client
-A python client library for the robot Furhat
+A python client library for the robot Furhat Gen 2
 
-## Install
-
-`pip install furhat-client`
+## Install (currently not available for Gen 2)
